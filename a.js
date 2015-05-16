@@ -2,10 +2,11 @@ module.exports = function createAnnotator() {
   var registry = {};
   var a = {};
 
-  var A = function () {
+  function A () {
     this._annotations = [];
     this._factories = [];
   };
+  
   A.prototype.for = function (SomeClass) {
     var annotations = this._annotations;
     if (SomeClass.annotations) {
@@ -18,7 +19,7 @@ module.exports = function createAnnotator() {
     return SomeClass;
   }
 
-  var register = function (name, impl) {
+  function register(name, impl) {
     registry[name] = impl;
     A.prototype[name] = function (param) {
       var Annotation = registry[name];
@@ -30,7 +31,14 @@ module.exports = function createAnnotator() {
       this._annotations.push(new Annotation(param));
 
       // chaining
-      return this;
+      var self = this;
+      return function (chain) {
+        if (typeof chain === 'object') {
+          return self;
+        } else {
+          return self.for(chain);  
+        }
+      }
     };
     a[name] = function (param) {
       var instance = new A();
@@ -38,7 +46,7 @@ module.exports = function createAnnotator() {
     }
   };
 
-  var registerFactory = function (name, impl) {
+  function registerFactory(name, impl) {
     registry[name] = impl;
     A.prototype[name] = function () {
       var args = arguments;
@@ -48,7 +56,14 @@ module.exports = function createAnnotator() {
       });
 
       // chaining
-      return this;
+      var self = this;
+      return function (chain) {
+        if (typeof chain === 'object') {
+          return self;
+        } else {
+          return self.for(chain);  
+        }
+      }
     };
     a[name] = function (param) {
       var instance = new A();

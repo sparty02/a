@@ -1,0 +1,23 @@
+{
+  "name": "@sparty02/a",
+  "version": "0.1.0",
+  "description": "Annotator for ES5. Lets you write ES5 with TypeScript-like annotations.",
+  "main": "a.js",
+  "scripts": {
+    "test": "jasmine-node a3 --autotest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sparty02/a.git"
+  },
+  "author": "Ryan Dunckel <sparty02@gmail.com> (http://me.sparty02.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sparty02/a/issues"
+  },
+  "homepage": "https://github.com/sparty02/a",
+  "devDependencies": {
+    "jasmine": "^2.3.1",
+    "jasmine-node": "^1.14.5"
+  }
+}

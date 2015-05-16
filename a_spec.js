@@ -19,11 +19,12 @@ describe('a', function () {
 
   it('should annotate classes', function () {
     register('RouteConfig', RouteConfig);
-    function MyCtrl () {};
 
-    a.RouteConfig([
+    (a).RouteConfig([
       { path: '/', component: 'Foo'}
-    ]).for(MyCtrl);
+    ])
+    (MyCtrl);
+    function MyCtrl () {};
 
     expect(MyCtrl.annotations).toBeDefined();
     expect(MyCtrl.annotations.length).toBe(1);
@@ -34,13 +35,13 @@ describe('a', function () {
     register('RouteConfig', RouteConfig);
     register('View', View);
 
-    a.RouteConfig([
+    (a).RouteConfig([
       { path: '/', component: 'Foo'}
-    ]).
-    View({
+    ])
+    (a).View({
       template: 'my.html'
-    }).
-    for(MyCtrl);
+    })
+    (MyCtrl);
     function MyCtrl () {};
 
     expect(MyCtrl.annotations.length).toBe(2);
@@ -50,6 +51,7 @@ describe('a', function () {
 
   it('should annotate methods', function () {
     register('CanActivate', CanActivate);
+    
     function MyCtrl () {};
     a.CanActivate(
     MyCtrl.prototype.myHook = function () {
@@ -66,7 +68,40 @@ describe('a', function () {
       SomeClass.parameters = [Array.prototype.slice.call(args, 0)];
     });
 
-    a.inject(Service).for(MyCtrl);
+    (a).inject(Service)
+    (MyCtrl)
+    function MyCtrl (service) {}
+
+    expect(MyCtrl.parameters).toEqual([[Service]]);
+  });
+
+  it('should allow registering factories while chaining non-factories', function () {
+    register('RouteConfig', RouteConfig);
+    registerFactory('inject', function (SomeClass, args) {
+      SomeClass.parameters = [Array.prototype.slice.call(args, 0)];
+    });
+
+    (a).RouteConfig([
+      { path: '/', component: 'Foo'}
+    ])
+    (a).inject(Service)
+    (MyCtrl)
+    function MyCtrl (service) {}
+
+    expect(MyCtrl.parameters).toEqual([[Service]]);
+  });
+
+  it('should not care about the order of annotations', function () {
+    register('RouteConfig', RouteConfig);
+    registerFactory('inject', function (SomeClass, args) {
+      SomeClass.parameters = [Array.prototype.slice.call(args, 0)];
+    });
+
+    (a).inject(Service)
+    (a).RouteConfig([
+      { path: '/', component: 'Foo'}
+    ])
+    (MyCtrl)
     function MyCtrl (service) {}
 
     expect(MyCtrl.parameters).toEqual([[Service]]);
