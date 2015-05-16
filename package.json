@@ -4,7 +4,7 @@
   "description": "Annotator for ES5. Lets you write ES5 with TypeScript-like annotations.",
   "main": "a.js",
   "scripts": {
-    "test": "jasmine-node a3 --autotest --watch"
+    "test": "jasmine-node ./ --autotest --watch"
   },
   "repository": {
     "type": "git",
