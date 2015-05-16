@@ -11,13 +11,13 @@ This library is super experimental. Like winter, changes are coming.
 This JS code:
 
 ```js
-a.RouteConfig([
+(a).RouteConfig([
   { path: '/' }
-]).
-View({
+])
+(a).View({
   template: '...'
-}).
-for(MyController)
+})
+(MyController)
 function MyController () {}
 ```
 
