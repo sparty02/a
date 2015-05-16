@@ -118,6 +118,18 @@ describe('a', function () {
 
   //TODO: throw when there's no "for" block for a chained context
 
+  it('should allow use of Angular 1 style injection', function () {
+    registerFactory('Inject', function (SomeClass, args) {
+      SomeClass.$inject = Array.prototype.slice.call(args, 0);
+    });
+
+    (a).Inject('Service')
+    (MyCtrl)
+    function MyCtrl (service) {}
+
+    expect(MyCtrl.$inject).toEqual(['Service']);
+  });
+
   function RouteConfig(config) {
     this.config = config;
   }
